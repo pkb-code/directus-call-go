@@ -179,6 +179,7 @@ func invokeHandler(cnf serverOpts) http.HandlerFunc {
 				slog.String("event", ir.Trigger.Event),
 				slog.String("collection", ir.Trigger.Collection),
 				slog.Any("keys", keys),
+				slog.String("payload", string(ir.Payload)),
 				slog.String("user", ir.Accountability.User))
 		}
 
@@ -244,6 +245,7 @@ func emitUserError(cnf serverOpts, r *http.Request, w http.ResponseWriter, ir in
 			slog.String("code", known.Code),
 			slog.String("message", known.Message),
 			slog.Any("extensions", known.Extensions),
+			slog.String("payload", string(ir.Payload)),
 			slog.String("fnname", ir.FnName))
 
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
@@ -257,6 +259,7 @@ func emitUserError(cnf serverOpts, r *http.Request, w http.ResponseWriter, ir in
 	cnf.logger.ErrorContext(r.Context(), "callgo: function unexpected error",
 		slog.String("error", userError.Error()),
 		slog.String("fnname", ir.FnName),
+		slog.String("payload", string(ir.Payload)),
 		slog.String("details", errors.Details(userError)))
 
 	if cnf.reporter != nil {
