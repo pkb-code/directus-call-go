@@ -179,7 +179,6 @@ func invokeHandler(cnf serverOpts) http.HandlerFunc {
 				slog.String("event", ir.Trigger.Event),
 				slog.String("collection", ir.Trigger.Collection),
 				slog.Any("keys", keys),
-				slog.String("payload", string(ir.Payload)),
 				slog.String("user", ir.Accountability.User))
 		}
 
