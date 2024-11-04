@@ -33,6 +33,7 @@ func WithLogger(logger *slog.Logger) ServerOption {
 
 type ErrorReporter interface {
 	ReportError(ctx context.Context, err error)
+	ReportErrorRequest(r *http.Request, err error)
 	ReportPanics(ctx context.Context)
 }
 
@@ -262,7 +263,7 @@ func emitUserError(cnf serverOpts, r *http.Request, w http.ResponseWriter, ir in
 		slog.String("details", errors.Details(userError)))
 
 	if cnf.reporter != nil {
-		cnf.reporter.ReportError(r.Context(), userError)
+		cnf.reporter.ReportErrorRequest(r, userError)
 	}
 	if env.IsLocal() {
 		fmt.Println(errors.Stack(userError))
